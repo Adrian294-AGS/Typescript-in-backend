@@ -32,7 +32,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             res.status(401).json({success: false, message: "Unmatched Password"});
             return;
         }
-        
+        const user = await findUser(username);
+        if(!user?.username){
+            
+        }
     } catch (error) {
         console.log("Login Error: ", error);
         res.status(500).json({success: false, message: "Server Error"});
