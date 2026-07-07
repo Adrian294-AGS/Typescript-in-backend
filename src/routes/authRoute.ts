@@ -3,4 +3,4 @@ import { register } from "../controllers/authController.js";
 
 const route = Router();
 
-route.post("/register", )
+route.post("/register", register);

@@ -4,9 +4,9 @@ import bcrypt from "bcryptjs";
 
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { username, email, password} = req.body as {username: string, email: string, password: string};
+        const { username, email, password} = req.body as {username: string, email: string | null, password: string};
 
-        if(!username || !email || !password){
+        if(!username || !password){
             res.status(401).json({success: false, message: "Invalid Input Field"});
             return;
         }
@@ -34,8 +34,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         }
         const user = await findUser(username);
         if(!user?.username){
-            
+            res.status(401).json({success: false, message: "Username Does not exist"});
+            return;
         }
+        let isValid = await bcrypt.compare(password, user.password);
+        if(!isValid){
+            res.status(401).json({success: false, message: "password do not matched"});
+            return;
+        };
+
     } catch (error) {
         console.log("Login Error: ", error);
         res.status(500).json({success: false, message: "Server Error"});
