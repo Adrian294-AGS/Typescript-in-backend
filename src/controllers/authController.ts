@@ -1,6 +1,8 @@
 import type {Request, Response} from "express";
 import { findUser, createUser } from "../model/userModel.js";
 import bcrypt from "bcryptjs";
+import { generateAccessToken, generateRefreshToken} from "../services/jwt.js";
+import redis from "../config/redisCon.js";
 
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -42,7 +44,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             res.status(401).json({success: false, message: "password do not matched"});
             return;
         };
+    
+        const accessToken = generateAccessToken({UID: user.UID, username: user.username});
+        const refreshToken = generateRefreshToken({UID: user.UID, username: user.username});
 
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+        await redis.setex(`user:2`, 3600, JSON.stringify({UID: user.UID, username: user.username}));
+        res.status(200).json({success: true, message: "Successfully loged In", accessToken});
     } catch (error) {
         console.log("Login Error: ", error);
         res.status(500).json({success: false, message: "Server Error"});

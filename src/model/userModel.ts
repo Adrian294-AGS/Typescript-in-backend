@@ -20,7 +20,7 @@ export const createUser = async ({username, password, email}: RegisterUser): Pro
 };
 
 export const findUser = async (username: string): Promise<userInfo | null> => {
-    const [result] = await pool.execute<userInfo[]>("SELECT username, password FROM tbl_user WHERE username = ?", [username]);
+    const [result] = await pool.execute<userInfo[]>("SELECT UID, username, password FROM tbl_user WHERE username = ?", [username]);
     return result[0] ?? null;
 };
 

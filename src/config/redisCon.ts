@@ -1,6 +1,6 @@
 import { Redis } from "ioredis";
 
-const host = process.env["REDIS_HOST"];
+const host = process.env['REDIS_HOST'];
 const port = Number(process.env["REDIS_PORT"]);
 
 const redis = new Redis({
