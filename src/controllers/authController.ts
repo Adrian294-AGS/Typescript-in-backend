@@ -54,7 +54,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             secure: false,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-        await redis.setex(`user:2`, 3600, JSON.stringify({UID: user.UID, username: user.username}));
+        await redis.setex(`user:${user.UID}`, 3600, JSON.stringify({UID: user.UID, username: user.username}));
         res.status(200).json({success: true, message: "Successfully loged In", accessToken});
     } catch (error) {
         console.log("Login Error: ", error);
