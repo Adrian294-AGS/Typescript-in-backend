@@ -1,5 +1,6 @@
 import { buildRateLimiter } from "../config/rateLimiter.js";
 import redis from "../config/redisCon.js";
+import { ipKeyGenerator } from "express-rate-limit";
 import type { Request } from "express";
 
 export const globalLimiter = buildRateLimiter({
@@ -20,6 +21,6 @@ export const perUserLimiter = buildRateLimiter({
     redisClient: redis,
     windowMs: 60_000,
     max: 60,
-    keyGenerator: (req: Request) => (req as any).user?.UID ?? req.ip ?? "unknown",
+    keyGenerator: (req: Request) => (req as any).user?.UID ?? ipKeyGenerator(req.ip ?? "unknown"),
     keyPrefix: "user"
 });
