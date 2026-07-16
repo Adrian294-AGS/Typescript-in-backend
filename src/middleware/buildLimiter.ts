@@ -1,7 +1,7 @@
 import { buildRateLimiter } from "../config/rateLimiter.js";
 import redis from "../config/redisCon.js";
 import { ipKeyGenerator } from "express-rate-limit";
-import type { Request } from "express";
+import type { AuthRequest } from "./jwtAuthentication.js";
 
 export const globalLimiter = buildRateLimiter({
     redisClient: redis,
@@ -21,6 +21,6 @@ export const perUserLimiter = buildRateLimiter({
     redisClient: redis,
     windowMs: 60_000,
     max: 60,
-    keyGenerator: (req: Request) => (req as any).user?.UID ?? ipKeyGenerator(req.ip ?? "unknown"),
+    keyGenerator: (req: AuthRequest) => (req as any).user?.UID ?? ipKeyGenerator(req.ip ?? "unknown"),
     keyPrefix: "user"
 });

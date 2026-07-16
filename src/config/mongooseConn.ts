@@ -1,20 +1,18 @@
 import mongoose from "mongoose";
 
-export const mongooseConn = async (): Promise<void> => {
-  const mongoDB = process.env["MONGODB_URI"] as string;
+const mongodbUri = process.env["MONGODB_URI"] as string;
+if (!mongodbUri) throw new Error("MongoDb URI is Undefine");
 
+export const mongooseConn = async (): Promise<void> => {
   try {
-    const conn = await mongoose.connect(mongoDB, {
-      dbName: "myapp",
-    });
-    conn.connection.on('error', (err) => {
-        console.log("MONGODB ERROR: ", err);
-    })
+    if (mongoose.connection.readyState === 1) return;
+    await mongoose.connect(mongodbUri);
     process.on("SIGINT", async () => {
-      await mongoose.disconnect();
+      await mongoose.connection.close();
+      process.exit(0);
     });
-    console.log("MONGODB CONNECTED....");
+    console.log("MongoDB Connected.......");
   } catch (error) {
-    console.log("MongoDb Disconnected");
+    throw new Error("MOngo DB ERROR");
   }
 };
