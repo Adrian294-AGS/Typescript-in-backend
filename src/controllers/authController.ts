@@ -1,4 +1,4 @@
-import type {Request, Response} from "express";
+import type { Response, Request } from "express";
 import { findUser, createUser } from "../model/userModel.js";
 import bcrypt from "bcryptjs";
 import { generateAccessToken, generateRefreshToken} from "../services/jwt.js";
