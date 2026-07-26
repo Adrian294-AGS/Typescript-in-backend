@@ -18,9 +18,11 @@ export const fileErrorHandler: ErrorRequestHandler = (
       return;
     }
     res.status(400).json({ success: false, message: err.message });
+    return;
   }
   if (err) {
     res.status(400).json({ success: false, message: err.message });
+    return;
   }
   next();
 };
