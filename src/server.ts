@@ -7,6 +7,7 @@ import { mongooseConn } from "./config/mongooseConn.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.js";
 import { fileErrorHandler } from "./middleware/fileErrorHandler.js";
+import passport from "passport";
 
 const app = express();
 const Port = Number(process.env["SERVER_PORT"]);
@@ -16,8 +17,11 @@ app.use(express.static("uploads"));
 app.use(cookie());
 app.use(globalLimiter);
 
+app.use(passport.initialize());
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/auth", authRoute);
+
 
 app.use(fileErrorHandler);
 

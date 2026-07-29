@@ -7,7 +7,7 @@ import redis from "../config/redisCon.js";
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
         const { username, email, password} = req.body as {username: string, email: string | null, password: string};
-
+        
         if(!username || !password){
             res.status(401).json({success: false, message: "Invalid Input Field"});
             return;
