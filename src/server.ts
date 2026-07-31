@@ -22,7 +22,6 @@ app.use(passport.initialize());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/auth", authRoute);
 
-
 app.use(fileErrorHandler);
 
 mongooseConn().then(() => {

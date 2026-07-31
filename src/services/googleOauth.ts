@@ -10,14 +10,13 @@ passport.use(
             callbackURL: process.env["GOOGLE_CALLBACK_URL"] as string,
         },
         async (
-            accessToken: string,
+            _accessToken: string,
             refreshToken: string,
             profile: any,
             done: VerifyCallback
         ): Promise<void> => {
-            // Minimal verify callback: pass the profile through
             try {
-                return done(null, profile);
+                
             } catch (err) {
                 return done(err as Error);
             }
