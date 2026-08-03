@@ -1,5 +1,6 @@
 import pool from "../config/msqlCon.js";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
+import { v4 as uuidv4} from "uuid";
 
 interface RegisterUser {
     username: string,
@@ -8,14 +9,16 @@ interface RegisterUser {
 };
 
 interface userInfo extends RowDataPacket{
-    UID: number,
+    UID: string,
     password: string,
     username: string,
+    role: string,
     email?: string
 };
 
 export const createUser = async ({username, password, email}: RegisterUser): Promise<ResultSetHeader> => {
-    const [result] = await pool.execute<ResultSetHeader>(`INSERT INTO tbl_user (username, password, email) VALUES (?, ?, ?)`, [username, password, email ?? null]);
+    const newId: string = uuidv4()
+    const [result] = await pool.execute<ResultSetHeader>(`INSERT INTO tbl_user (UID, username, password, email) VALUES (?, ?, ?, ?)`, [newId, username, password, email ?? null]);
     return result;
 };
 

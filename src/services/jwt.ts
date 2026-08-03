@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
 
 interface JwtPayload {
-    UID: number,
+    UID: string,
     username: string,
+    role: string
 }
 
 const AccessSecret = process.env['JWT_ACCESS_SECRET'] as string;
