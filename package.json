@@ -25,9 +25,13 @@
     "multer": "^2.2.0",
     "mysql2": "^3.22.5",
     "nodemon": "^3.1.14",
+    "passport": "^0.7.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0",
     "rate-limit-redis": "^5.0.0",
     "swagger-jsdoc": "^6.3.0",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^14.0.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -38,8 +42,11 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.2.0",
     "@types/node": "^26.0.0",
+    "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth20": "^2.0.17",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
+    "@types/uuid": "^10.0.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   }

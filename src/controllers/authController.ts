@@ -7,7 +7,7 @@ import redis from "../config/redisCon.js";
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
         const { username, email, password} = req.body as {username: string, email: string | null, password: string};
-
+        
         if(!username || !password){
             res.status(401).json({success: false, message: "Invalid Input Field"});
             return;
@@ -45,8 +45,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             return;
         };
     
-        const accessToken = generateAccessToken({UID: user.UID, username: user.username});
-        const refreshToken = generateRefreshToken({UID: user.UID, username: user.username});
+        const accessToken = generateAccessToken({UID: user.UID, username: user.username, role: user.role});
+        const refreshToken = generateRefreshToken({UID: user.UID, username: user.username, role: user.role});
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
