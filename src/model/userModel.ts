@@ -8,7 +8,11 @@ interface RegisterUser {
     email?: string | null
 };
 
-interface userInfo extends RowDataPacket{
+interface RegisterUserOauth {
+    
+};
+
+interface UserInfo extends RowDataPacket{
     UID: string,
     password: string,
     username: string,
@@ -16,15 +20,27 @@ interface userInfo extends RowDataPacket{
     email?: string
 };
 
+interface UserOauthAccount extends RowDataPacket {
+    UID: string,
+    username: string,
+    role: string,
+    email?: string
+}
+
 export const createUser = async ({username, password, email}: RegisterUser): Promise<ResultSetHeader> => {
     const newId: string = uuidv4()
     const [result] = await pool.execute<ResultSetHeader>(`INSERT INTO tbl_user (UID, username, password, email) VALUES (?, ?, ?, ?)`, [newId, username, password, email ?? null]);
     return result;
 };
 
-export const findUser = async (username: string): Promise<userInfo | null> => {
-    const [result] = await pool.execute<userInfo[]>("SELECT UID, username, password FROM tbl_user WHERE username = ?", [username]);
+export const findUser = async (username: string): Promise<UserInfo | null> => {
+    const [result] = await pool.execute<UserInfo[]>("SELECT UID, username, password FROM tbl_user WHERE username = ?", [username]);
     return result[0] ?? null;
 };
 
+export const findUserOauth = async (id: string, provider: string): Promise<UserOauthAccount | null> => {
+    const [result] = await pool.execute<UserOauthAccount[]>("SELECT UID, username, role, email from tbl_user AS A INNER JOIN tbl_oauth_account AS B ON A.UID = B.UID WHERE B.provider = ? AND B.provider_user_id = ?", [provider, id]);
+    return result[0] ?? null;
+};
 
+export const createUserOauth = async (userInput: )
