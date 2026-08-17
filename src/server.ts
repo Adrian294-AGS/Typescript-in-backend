@@ -8,6 +8,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.js";
 import { fileErrorHandler } from "./middleware/fileErrorHandler.js";
 import passport from "passport";
+import "./services/googleOauth.js";
 
 const app = express();
 const Port = Number(process.env["SERVER_PORT"]);

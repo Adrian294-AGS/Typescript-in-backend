@@ -9,7 +9,11 @@ interface RegisterUser {
 };
 
 interface RegisterUserOauth {
-    
+    username: string,
+    email?: string | null,
+    provider: string,
+    providerUserId: string,
+    refreshToken?: string | null
 };
 
 interface UserInfo extends RowDataPacket{
@@ -43,4 +47,23 @@ export const findUserOauth = async (id: string, provider: string): Promise<UserO
     return result[0] ?? null;
 };
 
-export const createUserOauth = async (userInput: )
+export const createUserOauth = async ({username, email, provider, providerUserId, refreshToken}: RegisterUserOauth): Promise<ResultSetHeader> => {
+    const newId: string = uuidv4();
+    const [result] = await pool.execute<ResultSetHeader>(
+        `INSERT INTO tbl_user (UID, username, email) VALUES (?, ?, ?)`,
+        [newId, username, email ?? null]
+    );
+    await pool.execute(
+        `INSERT INTO tbl_oauth_account (UID, provider, provider_user_id, refresh_token) VALUES (?, ?, ?, ?)`,
+        [newId, provider, providerUserId, refreshToken ?? null]
+    );
+    return result;
+};
+
+export const updateOauthRefreshToken = async (provider: string, providerUserId: string, refreshToken: string): Promise<ResultSetHeader> => {
+    const [result] = await pool.execute<ResultSetHeader>(
+        `UPDATE tbl_oauth_account SET refresh_token = ? WHERE provider = ? AND provider_user_id = ?`,
+        [refreshToken, provider, providerUserId]
+    );
+    return result;
+};
