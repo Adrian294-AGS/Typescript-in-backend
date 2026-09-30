@@ -1,12 +1,11 @@
-interface AuthenticatedUser {
-    UID: number,
-    username: string
-};
-
 declare global {
     namespace Express {
-        interface Request {
-            user?: AuthenticatedUser
+        interface User {
+            UID: string;
+            username: string;
+            role?: string;
         }
     }
 }
+
+export {};
