@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { register, login } from "../controllers/authController.js";
 import { loginLimiter } from "../middleware/buildLimiter.js";
+import passport from "passport";
 
 const authRoute = Router();
 
@@ -171,5 +172,9 @@ authRoute.post("/register", register);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 authRoute.post("/login", loginLimiter, login);
+
+authRoute.get("auth/google", passport.authenticate("google", {scope: ["profile", "email"]}));
+
+authRoute.get("auth/google/callBack", passport.authenticate("google", {session: false}));
 
 export default authRoute;
